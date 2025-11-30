@@ -1,0 +1,121 @@
+.heroBanner {
+  padding: 6rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #00d4aa 0%, #6366f1 100%);
+}
+
+[data-theme='dark'] .heroBanner {
+  background: linear-gradient(135deg, #1ae0b5 0%, #818cf8 100%);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.features {
+  padding: 4rem 0;
+  background: var(--ifm-background-color);
+}
+
+.feature {
+  margin-bottom: 2rem;
+}
+
+.feature h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.feature p {
+  color: var(--ifm-font-color-base);
+  line-height: 1.6;
+}
+
+.statsSection {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+  text-align: center;
+}
+
+[data-theme='dark'] .statsSection {
+  background: linear-gradient(135deg, rgba(26, 224, 181, 0.08) 0%, rgba(129, 140, 248, 0.08) 100%);
+}
+
+.statCard {
+  padding: 2rem;
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+[data-theme='dark'] .statCard {
+  background: var(--ifm-background-surface-color);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+}
+
+.statCard h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.statCard p {
+  font-size: 1.1rem;
+  color: var(--ifm-font-color-base);
+  margin: 0;
+}
+
+.ctaSection {
+  padding: 6rem 0;
+  text-align: center;
+  background: linear-gradient(135deg, #00d4aa 0%, #6366f1 100%);
+  color: white;
+}
+
+[data-theme='dark'] .ctaSection {
+  background: linear-gradient(135deg, #1ae0b5 0%, #818cf8 100%);
+}
+
+.ctaSection h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.ctaSection p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+@media (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 0;
+  }
+
+  .statCard h2 {
+    font-size: 2.5rem;
+  }
+
+  .ctaSection h2 {
+    font-size: 2rem;
+  }
+}

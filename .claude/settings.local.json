@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "SlashCommand(/sp.phr --title \"User Greeting\" --stage general)",
+      "SlashCommand(/sp.phr --title \"Project Instructions Review\" --stage general)",
+      "Bash(.specify/scripts/bash/create-phr.sh:*)",
+      "SlashCommand(/sp.constitution)",
+      "SlashCommand(/sp.phr --title \"Update OpenAI Physical AI & Agents Handbook Constitution\" --stage constitution)",
+      "SlashCommand(/sp.phr --title \"Table of Contents for Handbook\" --stage general)",
+      "SlashCommand(/sp.specify:*)",
+      "Bash(git fetch:*)",
+      "SlashCommand(/sp.phr --title \"Chapter 1 Specification Complete\" --stage spec --feature chapter-1-physical-ai)",
+      "Bash(git checkout:*)",
+      "SlashCommand(/sp.phr:*)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "SlashCommand(/sp.implement:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(npm install)",
+      "Bash(npm start)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

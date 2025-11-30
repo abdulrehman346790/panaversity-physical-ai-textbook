@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+openai-agents
+qdrant-client
+sqlalchemy
+psycopg2-binary
+python-dotenv
+beautifulsoup4
+markdown
