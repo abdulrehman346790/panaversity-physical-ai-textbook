@@ -9,13 +9,15 @@ from auth import router as auth_router
 from personalization import router as personalization_router, get_personalization_context
 from database import get_db
 import asyncio
+import os
 
 app = FastAPI(title="Physical AI Textbook Chatbot")
 
-# Configure CORS
+# Configure CORS - allow both localhost and production URLs
+allowed_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify the Docusaurus URL
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

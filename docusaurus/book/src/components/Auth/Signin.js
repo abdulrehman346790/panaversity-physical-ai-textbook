@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useAuth } from './AuthContext';
 import styles from './Auth.module.css';
+import API_BASE_URL from '@site/src/config/api';
 
 const Signin = ({ onClose, onSwitchToSignup }) => {
     const { login } = useAuth();
@@ -24,7 +25,7 @@ const Signin = ({ onClose, onSwitchToSignup }) => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8001/api/auth/signin', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '../Auth/AuthContext';
+import API_BASE_URL from '@site/src/config/api';
 
 const TranslationContext = createContext(null);
 
 export const TranslationProvider = ({ children }) => {
     const [language, setLanguage] = useState('en'); // 'en' or 'ur'
-    
+
     useEffect(() => {
         try {
             const stored = typeof window !== 'undefined' && localStorage.getItem('panaversity_language');
@@ -30,7 +31,7 @@ export const TranslationProvider = ({ children }) => {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/translate', {
+            const response = await fetch(`${API_BASE_URL}/api/translate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ markdown: text, target_locale: 'ur' })
@@ -54,7 +55,7 @@ export const TranslationProvider = ({ children }) => {
         setLanguage(prev => {
             const next = prev === 'en' ? 'ur' : 'en';
             if (typeof window !== 'undefined') {
-                try { localStorage.setItem('panaversity_language', next); } catch (e) {}
+                try { localStorage.setItem('panaversity_language', next); } catch (e) { }
             }
             return next;
         });
@@ -62,7 +63,7 @@ export const TranslationProvider = ({ children }) => {
         if (token) {
             try {
                 const nextLang = language === 'en' ? 'ur' : 'en';
-                await fetch(`http://localhost:8001/api/user/lang?token=${encodeURIComponent(token)}&language=${encodeURIComponent(nextLang)}`, { method: 'POST' });
+                await fetch(`${API_BASE_URL}/api/user/lang?token=${encodeURIComponent(token)}&language=${encodeURIComponent(nextLang)}`, { method: 'POST' });
             } catch (err) { /* ignore */ }
         }
     };

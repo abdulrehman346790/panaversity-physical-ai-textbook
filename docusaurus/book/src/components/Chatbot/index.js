@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../Auth/AuthContext';
 import styles from './Chatbot.module.css';
 import TranslationFeedback from '@site/src/components/Translation/TranslationFeedback';
+import API_BASE_URL from '@site/src/config/api';
 
 const Chatbot = () => {
     const { token } = useAuth(); // Get token from AuthContext
@@ -42,7 +43,7 @@ const Chatbot = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8001/chat', {
+            const response = await fetch(`${API_BASE_URL}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

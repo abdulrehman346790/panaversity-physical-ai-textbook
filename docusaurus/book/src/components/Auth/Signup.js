@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useAuth } from './AuthContext';
 import styles from './Auth.module.css';
+import API_BASE_URL from '@site/src/config/api';
 
 const Signup = ({ onClose }) => {
     const { login } = useAuth();
@@ -46,7 +47,7 @@ const Signup = ({ onClose }) => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:8001/api/auth/signup', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

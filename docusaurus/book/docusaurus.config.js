@@ -120,7 +120,7 @@ const config = {
             position: 'right',
           },
           {
-            href: 'https://github.com/panaversity/panaversity-physical-ai',
+            href: 'https://github.com/abdulrehman346790/panaversity-physical-ai-textbook',
             label: 'GitHub',
             position: 'right',
           },
