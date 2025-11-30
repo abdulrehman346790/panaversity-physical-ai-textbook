@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Urdu Translation API
+  description: Translation microservice endpoints for Urdu translation and user preferences.
+  version: '1.0'
+servers:
+  - url: https://api.panaversity.example
+paths:
+  /api/translate:
+    post:
+      summary: Translate Markdown content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_path:
+                  type: string
+                  description: Absolute or repo path for the source content
+                markdown:
+                  type: string
+                  description: Markdown content to translate
+                target_locale:
+                  type: string
+                  example: 'ur'
+                model:
+                  type: string
+                  description: Preferred LLM model to use
+                  example: 'gpt-4o'
+              required: [markdown, target_locale]
+      responses:
+        '200':
+          description: Translated content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  translated_markdown:
+                    type: string
+                  translated_html:
+                    type: string
+                  content_hash:
+                    type: string
+                  cached: 
+                    type: boolean
+        '400':
+          description: Bad request
+        '429':
+          description: Rate limited
+  /api/translate/status/{job_id}:
+    get:
+      summary: Get translation job status
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job status
+
+  /api/user/preference:
+    get:
+      summary: Get user language preference
+      responses:
+        '200':
+          description: User preference
+    post:
+      summary: Set user language preference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  enum: ['en','ur','hybrid']
+      responses:
+        '200':
+          description: Preference saved
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string

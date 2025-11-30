@@ -1,0 +1,33 @@
+.languageSwitcherContainer {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.languageButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.languageButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.englishButton {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+}
+
+.urduButton {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white !important;
+    font-family: 'Noto Nastaliq Urdu', serif;
+    font-size: 1.1em;
+}

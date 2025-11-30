@@ -23,7 +23,7 @@ const config = {
   url: 'https://abdulrehman346790.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/panaversity-physical-ai-textbook/',
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -37,7 +37,18 @@ const config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ur'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+        direction: 'ltr',
+      },
+      ur: {
+        label: 'اردو',
+        direction: 'rtl',
+        htmlLang: 'ur-PK',
+      },
+    },
   },
 
   presets: [
@@ -91,19 +102,23 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'Physical AI Handbook',
+        title: 'Physical AI & Humanoid Robotics',
         logo: {
-          alt: 'Physical AI Handbook Logo',
-          src: 'img/logo.svg',
+          alt: 'Physical AI Logo',
+          src: 'img/logo.jpg',
         },
         items: [
+          { type: 'localeDropdown', position: 'right' },
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'bookSidebar',
             position: 'left',
             label: 'Chapters',
           },
-          { to: '/blog', label: 'Blog', position: 'left' },
+          {
+            type: 'custom-auth-button',
+            position: 'right',
+          },
           {
             href: 'https://github.com/panaversity/panaversity-physical-ai',
             label: 'GitHub',
@@ -143,10 +158,6 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
               {
                 label: 'GitHub',
                 href: 'https://github.com/panaversity/panaversity-physical-ai',

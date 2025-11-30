@@ -1,0 +1,42 @@
+.languageToggle {
+    background: linear-gradient(135deg, #00a86b 0%, #008f5b 100%);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Noto Nastaliq Urdu', serif;
+}
+
+.languageToggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 168, 107, 0.4);
+}
+
+/* RTL Support for Urdu */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .markdown {
+    direction: rtl;
+    text-align: right;
+}
+
+/* Urdu Font */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+
+.urduText {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    direction: rtl;
+    text-align: right;
+    line-height: 2;
+}

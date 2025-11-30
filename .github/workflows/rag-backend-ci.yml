@@ -1,0 +1,27 @@
+name: Rag Backend CI
+
+on:
+  push:
+    paths:
+      - 'rag-backend/**'
+  pull_request:
+    paths:
+      - 'rag-backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r rag-backend/requirements.txt
+          pip install pytest
+      - name: Run tests
+        run: |
+          pytest rag-backend/tests -q

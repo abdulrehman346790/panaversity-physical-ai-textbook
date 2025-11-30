@@ -1,0 +1,42 @@
+{
+  "link.title.Learn": {
+    "message": "Learn",
+    "description": "The title of the footer links column with title=Learn in the footer"
+  },
+  "link.title.Community": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.More": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Introduction": {
+    "message": "Introduction",
+    "description": "The label of footer link with label=Introduction linking to /docs/intro"
+  },
+  "link.item.label.Chapter 1: Physical AI": {
+    "message": "Chapter 1: Physical AI",
+    "description": "The label of footer link with label=Chapter 1: Physical AI linking to /docs/chapter1"
+  },
+  "link.item.label.Panaversity": {
+    "message": "Panaversity",
+    "description": "The label of footer link with label=Panaversity linking to https://panaversity.com"
+  },
+  "link.item.label.GitHub Discussions": {
+    "message": "GitHub Discussions",
+    "description": "The label of footer link with label=GitHub Discussions linking to https://github.com/panaversity/panaversity-physical-ai/discussions"
+  },
+  "link.item.label.Blog": {
+    "message": "Blog",
+    "description": "The label of footer link with label=Blog linking to /blog"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/panaversity/panaversity-physical-ai"
+  },
+  "copyright": {
+    "message": "Copyright © 2025 Panaversity. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}

@@ -1,0 +1,122 @@
+/* RTL Document Direction */
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Arial', sans-serif;
+}
+
+/* Typography */
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+    font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', sans-serif;
+    line-height: 1.6;
+}
+
+[dir="rtl"] p,
+[dir="rtl"] li,
+[dir="rtl"] span,
+[dir="rtl"] a {
+    line-height: 2;
+    font-size: 1.05em;
+}
+
+/* RTL Tables */
+[dir="rtl"] table {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+    text-align: right;
+    border-right: none;
+    border-left: 1px solid var(--ifm-table-border-color);
+}
+
+[dir="rtl"] th:last-child,
+[dir="rtl"] td:last-child {
+    border-left: none;
+}
+
+/* RTL Lists */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+    padding-right: 2rem;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+/* RTL Code Blocks (keep LTR) */
+[dir="rtl"] pre,
+[dir="rtl"] code,
+[dir="rtl"] .prism-code {
+    direction: ltr;
+    text-align: left;
+    font-family: 'Fira Code', monospace;
+    /* Ensure monospace for code */
+}
+
+/* RTL Sidebar */
+[dir="rtl"] .theme-doc-sidebar-container {
+    border-right: none;
+    border-left: 1px solid var(--ifm-toc-border-color);
+}
+
+/* RTL Navigation */
+[dir="rtl"] .navbar__items {
+    direction: rtl;
+}
+
+[dir="rtl"] .navbar__brand {
+    margin-right: 0;
+    margin-left: 1rem;
+}
+
+[dir="rtl"] .navbar__item {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Admonitions/Callouts */
+[dir="rtl"] .alert {
+    border-left-width: 0;
+    border-right-width: var(--ifm-alert-border-left-width);
+    border-style: solid;
+}
+
+[dir="rtl"] .alert--info {
+    border-right-color: var(--ifm-color-info);
+}
+
+[dir="rtl"] .alert--success {
+    border-right-color: var(--ifm-color-success);
+}
+
+[dir="rtl"] .alert--warning {
+    border-right-color: var(--ifm-color-warning);
+}
+
+[dir="rtl"] .alert--danger {
+    border-right-color: var(--ifm-color-danger);
+}
+
+/* Pagination (Next/Prev) */
+[dir="rtl"] .pagination-nav__link--next .pagination-nav__label::after {
+    content: " ←";
+}
+
+[dir="rtl"] .pagination-nav__link--prev .pagination-nav__label::before {
+    content: "→ ";
+}
+
+/* Breadcrumbs */
+[dir="rtl"] .breadcrumbs__item:not(:last-child)::after {
+    content: "/";
+    /* Or mirror if using arrow */
+    transform: scaleX(-1);
+}

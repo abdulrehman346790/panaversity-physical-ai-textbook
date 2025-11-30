@@ -32,6 +32,7 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #e0e0e0;
+  position: relative;
 }
 
 .chatHeader {
@@ -48,7 +49,7 @@
   font-size: 16px;
 }
 
-.chatHeader button {
+.closeButton {
   background: none;
   border: none;
   color: white;
@@ -66,42 +67,76 @@
   background-color: #f9f9f9;
 }
 
-.message {
-  max-width: 80%;
-  padding: 10px 15px;
-  border-radius: 15px;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.user {
+.userMessage {
   align-self: flex-end;
   background-color: #25c2a0;
   color: white;
-  border-bottom-right-radius: 2px;
+  border-radius: 15px 15px 0 15px;
+  padding: 10px 15px;
+  max-width: 80%;
+  font-size: 14px;
 }
 
-.assistant {
+.botMessage {
   align-self: flex-start;
   background-color: #e0e0e0;
   color: #333;
-  border-bottom-left-radius: 2px;
+  border-radius: 15px 15px 15px 0;
+  padding: 10px 15px;
+  max-width: 80%;
+  font-size: 14px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.translationMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.75em;
+  color: #666;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 4px;
+}
+
+.translatedLabel {
+  font-style: italic;
+}
+
+.reportButton {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.reportButton:hover {
+  color: #b71c1c;
 }
 
 .chatInput {
   padding: 15px;
   border-top: 1px solid #eee;
   display: flex;
+  flex-direction: column;
   gap: 10px;
   background-color: white;
 }
 
 .chatInput input {
-  flex: 1;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 20px;
   outline: none;
+  width: 100%;
 }
 
 .chatInput button {
@@ -111,6 +146,7 @@
   padding: 8px 15px;
   border-radius: 20px;
   cursor: pointer;
+  align-self: flex-end;
 }
 
 .selectedTextIndicator {
@@ -136,9 +172,240 @@
   }
 }
 
-.loading {
-  font-size: 12px;
-  color: #888;
+.feedbackModalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.feedbackModal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.feedbackModal h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.closeModalButton {
+  margin-top: 10px;
+  background: #eee;
+  color: #333;
+  border: none;
+  padding: 8px 16px;
+  padding: 15px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+}
+
+.chatButton:hover {
+  transform: scale(1.05);
+}
+
+.chatWindow {
+  width: 350px;
+  height: 500px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.chatHeader {
+  background-color: #25c2a0;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatHeader h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chatMessages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f9f9f9;
+}
+
+.userMessage {
+  align-self: flex-end;
+  background-color: #25c2a0;
+  color: white;
+  border-radius: 15px 15px 0 15px;
+  padding: 10px 15px;
+  max-width: 80%;
+  font-size: 14px;
+}
+
+.botMessage {
   align-self: flex-start;
-  margin-left: 10px;
+  background-color: #e0e0e0;
+  color: #333;
+  border-radius: 15px 15px 15px 0;
+  padding: 10px 15px;
+  max-width: 80%;
+  font-size: 14px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.translationMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.75em;
+  color: #666;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 4px;
+}
+
+.translatedLabel {
+  font-style: italic;
+}
+
+.reportButton {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  text-decoration: underline;
+}
+
+.reportButton:hover {
+  color: #b71c1c;
+}
+
+.chatInput {
+  padding: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: white;
+}
+
+.chatInput input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  width: 100%;
+}
+
+.chatInput button {
+  background-color: #25c2a0;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.selectedTextIndicator {
+  font-size: 11px;
+  color: #25c2a0;
+  background-color: rgba(37, 194, 160, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border-left: 3px solid #25c2a0;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feedbackModalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.feedbackModal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.feedbackModal h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.closeModalButton {
+  margin-top: 10px;
+  background: #eee;
+  color: #333;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.closeModalButton:hover {
+  background: #ddd;
 }

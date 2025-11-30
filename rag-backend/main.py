@@ -1,14 +1,18 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from typing import Optional
 from agents import Runner
 from agent import triage_agent, config
 from ingest import ingest_docs
-from fastapi.middleware.cors import CORSMiddleware
+from auth import router as auth_router
+from personalization import router as personalization_router, get_personalization_context
+from database import get_db
 import asyncio
 
 app = FastAPI(title="Physical AI Textbook Chatbot")
 
-# CORS for Docusaurus frontend
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # In production, specify the Docusaurus URL
@@ -17,19 +21,69 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include Auth Router
+app.include_router(auth_router, prefix="/api")
+app.include_router(personalization_router, prefix="/api")
+
+# Include Translation Router
+from translation import router as translation_router, translate_markdown
+from feedback import router as feedback_router
+app.include_router(translation_router, prefix="/api")
+app.include_router(feedback_router, prefix="/api")
+
 class ChatRequest(BaseModel):
     message: str
     session_id: str = "default_session"
+    token: Optional[str] = None  # Optional user token for personalization
 
 class ChatResponse(BaseModel):
     response: str
+    translated: bool = False
+    source_lang: Optional[str] = None
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest):
+async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
     try:
+        # Get user personalization context if token provided
+        personalization_context = ""
+        if request.token:
+            try:
+                from personalization import get_user_personalization
+                profile = await get_user_personalization(request.token, db)
+                personalization_context = get_personalization_context(profile)
+            except:
+                pass  # Continue without personalization if token invalid
+        
+        # Prepend personalization context to message
+        enhanced_message = request.message
+        if personalization_context:
+            enhanced_message = f"[USER CONTEXT: {personalization_context}]\n\nUser Question: {request.message}"
+        
         # Run the agent workflow
-        result = await Runner.run(triage_agent, request.message, run_config=config)
-        return ChatResponse(response=result.final_output)
+        result = await Runner.run(triage_agent, enhanced_message, run_config=config)
+
+        # Post-process: consult user language pref and translate if necessary
+        user_lang = 'en'
+        if request.token:
+            try:
+                from personalization import get_user_language
+                pref = await get_user_language(request.token)
+                user_lang = pref.get('language', 'en')
+            except Exception:
+                user_lang = 'en'
+
+        final_text = result.final_output
+        is_translated = False
+        if user_lang == 'ur' and final_text:
+            try:
+                # Direct call to translation logic
+                final_text = translate_markdown(final_text, 'ur')
+                is_translated = True
+            except Exception as e:
+                # If translation fails, fallback to original final_text
+                print('Translation error:', e)
+
+        return ChatResponse(response=final_text, translated=is_translated, source_lang='en' if is_translated else None)
     except Exception as e:
         import traceback
         traceback.print_exc()

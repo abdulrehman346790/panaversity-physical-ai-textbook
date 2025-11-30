@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../Auth/AuthContext';
 import styles from './Chatbot.module.css';
+import TranslationFeedback from '@site/src/components/Translation/TranslationFeedback';
 
 const Chatbot = () => {
+    const { token } = useAuth(); // Get token from AuthContext
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { role: 'assistant', content: 'Hi! I am your AI Tutor. Ask me anything about the book!' }
     ]);
+    const [feedbackOpen, setFeedbackOpen] = useState(false);
+    const [feedbackMessageData, setFeedbackMessageData] = useState(null);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedText, setSelectedText] = useState('');
@@ -33,7 +38,7 @@ const Chatbot = () => {
         const userMessage = { role: 'user', content: input };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
-        setSelectedText('');
+        setSelectedText(''); // Clear selected text after sending
         setIsLoading(true);
 
         try {
@@ -42,12 +47,16 @@ const Chatbot = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: input }),
+                body: JSON.stringify({
+                    message: input,
+                    ...(token && { token }) // Only send token if it exists
+                }),
             });
 
             const data = await response.json();
-            const botMessage = { role: 'assistant', content: data.response };
+            const botMessage = { role: 'assistant', content: data.response, translated: data.translated };
             setMessages(prev => [...prev, botMessage]);
+            setFeedbackMessageData(null);
         } catch (error) {
             console.error('Error sending message:', error);
             setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Please check if the backend is running.' }]);
@@ -56,32 +65,50 @@ const Chatbot = () => {
         }
     };
 
+    const handleOpenFeedback = (msg) => {
+        setFeedbackMessageData({ content: msg.content, source_path: window.location.pathname });
+        setFeedbackOpen(true);
+    };
+    const handleCloseFeedback = () => setFeedbackOpen(false);
+
     return (
         <div className={styles.chatbotContainer}>
-            {!isOpen && (
-                <button className={styles.chatButton} onClick={toggleChat}>
-                    🤖 Chat
-                </button>
-            )}
+            {/* Floating Chat Button */}
+            <button className={styles.chatButton} onClick={toggleChat}>
+                💬
+            </button>
 
+            {/* Chat Window */}
             {isOpen && (
                 <div className={styles.chatWindow}>
                     <div className={styles.chatHeader}>
                         <h3>AI Tutor</h3>
-                        <button onClick={toggleChat}>×</button>
+                        <button className={styles.closeButton} onClick={toggleChat}>×</button>
                     </div>
+
                     <div className={styles.chatMessages}>
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`${styles.message} ${styles[msg.role]}`}>
-                                {msg.content}
+                        {messages.map((msg, idx) => (
+                            <div key={idx} className={msg.role === 'user' ? styles.userMessage : styles.botMessage}>
+                                <div className={styles.messageContent}>
+                                    <span>{msg.content}</span>
+                                    {msg.translated && (
+                                        <div className={styles.translationMeta}>
+                                            <span className={styles.translatedLabel}>Auto-translated</span>
+                                            <button className={styles.reportButton} onClick={() => handleOpenFeedback(msg)}>
+                                                Report Issue
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ))}
-                        {isLoading && <div className={styles.loading}>Thinking...</div>}
+                        {isLoading && <div className={styles.botMessage}>Thinking...</div>}
                     </div>
+
                     <div className={styles.chatInput}>
                         {selectedText && (
                             <div className={styles.selectedTextIndicator}>
-                                📝 Selected: "{selectedText.substring(0, 50)}..."
+                                Selected: "{selectedText.substring(0, 50)}..."
                             </div>
                         )}
                         <input
@@ -89,10 +116,23 @@ const Chatbot = () => {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                            placeholder="Ask a question or select text from the page..."
+                            placeholder="Ask about the textbook..."
                         />
                         <button onClick={sendMessage}>Send</button>
                     </div>
+
+                    {feedbackOpen && (
+                        <div className={styles.feedbackModalOverlay}>
+                            <div className={styles.feedbackModal}>
+                                <h4>Report Translation Issue</h4>
+                                <TranslationFeedback
+                                    sourcePath={feedbackMessageData?.source_path}
+                                    userId={token ? 'user' : 'anon'}
+                                />
+                                <button className={styles.closeModalButton} onClick={handleCloseFeedback}>Close</button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
