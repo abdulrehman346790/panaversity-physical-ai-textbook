@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Chatbot.module.css';
 
 const Chatbot = () => {
@@ -8,8 +8,24 @@ const Chatbot = () => {
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedText, setSelectedText] = useState('');
 
     const toggleChat = () => setIsOpen(!isOpen);
+
+    // Handle text selection from the page
+    useEffect(() => {
+        const handleTextSelection = () => {
+            const selection = window.getSelection().toString().trim();
+            if (selection && selection.length > 0 && selection.length < 500) {
+                setSelectedText(selection);
+                setInput(`Explain this: "${selection}"`);
+                setIsOpen(true); // Auto-open chat when text is selected
+            }
+        };
+
+        document.addEventListener('mouseup', handleTextSelection);
+        return () => document.removeEventListener('mouseup', handleTextSelection);
+    }, []);
 
     const sendMessage = async () => {
         if (!input.trim()) return;
@@ -17,6 +33,7 @@ const Chatbot = () => {
         const userMessage = { role: 'user', content: input };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
+        setSelectedText('');
         setIsLoading(true);
 
         try {
@@ -62,12 +79,17 @@ const Chatbot = () => {
                         {isLoading && <div className={styles.loading}>Thinking...</div>}
                     </div>
                     <div className={styles.chatInput}>
+                        {selectedText && (
+                            <div className={styles.selectedTextIndicator}>
+                                📝 Selected: "{selectedText.substring(0, 50)}..."
+                            </div>
+                        )}
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                            placeholder="Ask a question..."
+                            placeholder="Ask a question or select text from the page..."
                         />
                         <button onClick={sendMessage}>Send</button>
                     </div>
