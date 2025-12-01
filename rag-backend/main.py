@@ -33,6 +33,7 @@ from feedback import router as feedback_router
 app.include_router(translation_router, prefix="/api")
 app.include_router(feedback_router, prefix="/api")
 
+
 class ChatRequest(BaseModel):
     message: str
     session_id: str = "default_session"
@@ -42,6 +43,11 @@ class ChatResponse(BaseModel):
     response: str
     translated: bool = False
     source_lang: Optional[str] = None
+
+@app.get("/")
+async def root():
+    """Health check endpoint for deployment platforms"""
+    return {"status": "ok", "message": "Physical AI Textbook API is running"}
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
