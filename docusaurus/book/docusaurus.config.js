@@ -32,6 +32,11 @@ const config = {
 
   onBrokenLinks: 'warn',
 
+  customFields: {
+    // Make environment variables available to the frontend
+    API_URL: process.env.REACT_APP_API_URL || 'http://localhost:8001',
+  },
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
