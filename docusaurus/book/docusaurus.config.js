@@ -22,6 +22,7 @@ const config = {
   headTags: [
     {
       tagName: 'script',
+      attributes: {}, // Required by Docusaurus validation
       innerHTML: `
 (function() {
   try {
