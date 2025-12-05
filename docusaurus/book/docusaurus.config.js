@@ -19,6 +19,14 @@ const config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
+  scripts: [
+    {
+      src: '/js/safe-storage.js',
+      async: false,
+      defer: false,
+    },
+  ],
+
   // Set the production url of your site here
   url: 'https://abdulrehman346790.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
