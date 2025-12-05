@@ -19,11 +19,12 @@ const config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  scripts: [
+  headTags: [
     {
-      src: '/js/safe-storage.js',
-      async: false,
-      defer: false,
+      tagName: 'script',
+      attributes: {
+        src: '/js/safe-storage.js',
+      },
     },
   ],
 
