@@ -8,6 +8,7 @@ from ingest import ingest_docs
 from auth import router as auth_router
 from personalization import router as personalization_router, get_personalization_context
 from database import get_db
+from agents import SQLiteSession
 import asyncio
 import os
 

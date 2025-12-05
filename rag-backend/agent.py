@@ -1,5 +1,5 @@
 import os
-from agents import Agent, Runner, function_tool, OpenAIChatCompletionsModel
+from agents import Agent, Runner, function_tool, OpenAIChatCompletionsModel, SQLiteSession
 from agents.run import RunConfig
 from openai import AsyncOpenAI
 from qdrant_client import QdrantClient
@@ -63,3 +63,5 @@ triage_agent = Agent(
     instructions="You are a helpful assistant for the Physical AI Textbook. If the user asks a technical question about the book, handoff to the Book Expert. For general greetings, reply politely.",
     handoffs=[book_expert_agent]
 )
+
+# Session management is handled in main.py's /chat endpoint
