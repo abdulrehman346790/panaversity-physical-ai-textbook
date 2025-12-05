@@ -1,34 +1,39 @@
-import React, { useEffect } from 'react';
-import { AuthProvider } from '@site/src/components/Auth/AuthContext';
-import { TranslationProvider, useTranslation } from '@site/src/components/Translation/TranslationContext';
-import Chatbot from '@site/src/components/Chatbot';
-import '@site/src/theme/rtl.css';
-
-// Inner component to access translation context
-function RootContent({ children }) {
-    const { language } = useTranslation();
-
-    useEffect(() => {
-        // Set document direction based on language
-        document.documentElement.setAttribute('dir', language === 'ur' ? 'rtl' : 'ltr');
-    }, [language]);
-
-    return (
-        <>
-            {children}
-            {/* Chatbot */}
-            <Chatbot />
-        </>
-    );
-}
+import React from 'react';
+import Head from '@docusaurus/Head';
 
 // Default implementation, that you can customize
 export default function Root({ children }) {
     return (
-        <AuthProvider>
-            <TranslationProvider>
-                <RootContent>{children}</RootContent>
-            </TranslationProvider>
-        </AuthProvider>
+        <>
+            <Head>
+                <script>
+                    {`
+            (function() {
+              try {
+                var x = '__storage_test__';
+                localStorage.setItem(x, x);
+                localStorage.removeItem(x);
+              } catch (e) {
+                console.warn('localStorage access blocked. Mocking it to prevent application crash.');
+                var data = {};
+                var storageMock = {
+                  getItem: function(k) { return data[k] || null; },
+                  setItem: function(k, v) { data[k] = String(v); },
+                  removeItem: function(k) { delete data[k]; },
+                  clear: function() { data = {}; },
+                  key: function(i) { return Object.keys(data)[i] || null; },
+                  get length() { return Object.keys(data).length; }
+                };
+                try {
+                  Object.defineProperty(window, 'localStorage', { value: storageMock, writable: true, configurable: true });
+                  Object.defineProperty(window, 'sessionStorage', { value: storageMock, writable: true, configurable: true });
+                } catch (defErr) { console.error('Failed to mock localStorage:', defErr); }
+              }
+            })();
+          `}
+                </script>
+            </Head>
+            {children}
+        </>
     );
 }
