@@ -6,7 +6,8 @@ import UserProfile from './UserProfile';
 import styles from './Auth.module.css';
 
 const AuthButton = () => {
-    const { user } = useAuth();
+    const auth = useAuth();
+    const user = auth ? auth.user : null;
     const [showSignin, setShowSignin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
 
