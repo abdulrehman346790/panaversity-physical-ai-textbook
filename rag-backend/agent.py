@@ -41,12 +41,13 @@ async def search_book_content(query: str) -> str:
         query_vector = response.data[0].embedding
         print(f"[SEARCH] Generated embedding vector of size: {len(query_vector)}")
         
-        # Search Qdrant
-        hits = qdrant.search(
+        # Search Qdrant using query_points (correct method name)
+        search_result = qdrant.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
+            query=query_vector,
             limit=3
         )
+        hits = search_result.points
         print(f"[SEARCH] Found {len(hits)} results from Qdrant")
         
         if not hits:
