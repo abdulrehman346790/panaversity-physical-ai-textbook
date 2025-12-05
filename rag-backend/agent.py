@@ -30,25 +30,39 @@ async def search_book_content(query: str) -> str:
     Search the textbook for relevant content based on the user's query.
     Returns the most relevant text chunks.
     """
-    # Generate embedding for query
-    response = await openai_client.embeddings.create(
-        input=query,
-        model="text-embedding-004"
-    )
-    query_vector = response.data[0].embedding
-    
-    # Search Qdrant
-    hits = qdrant.search(
-        collection_name=COLLECTION_NAME,
-        query_vector=query_vector,
-        limit=3
-    )
-    
-    results = []
-    for hit in hits:
-        results.append(f"Source: {hit.payload['source']}\nContent: {hit.payload['content']}")
-    
-    return "\n\n".join(results)
+    try:
+        print(f"[SEARCH] Searching for: {query}")
+        
+        # Generate embedding for query
+        response = await openai_client.embeddings.create(
+            input=query,
+            model="text-embedding-004"
+        )
+        query_vector = response.data[0].embedding
+        print(f"[SEARCH] Generated embedding vector of size: {len(query_vector)}")
+        
+        # Search Qdrant
+        hits = qdrant.search(
+            collection_name=COLLECTION_NAME,
+            query_vector=query_vector,
+            limit=3
+        )
+        print(f"[SEARCH] Found {len(hits)} results from Qdrant")
+        
+        if not hits:
+            return "No relevant content found in the textbook. The collection might be empty or the query doesn't match any documents."
+        
+        results = []
+        for hit in hits:
+            results.append(f"Source: {hit.payload['source']}\nContent: {hit.payload['content']}")
+        
+        return "\n\n".join(results)
+    except Exception as e:
+        error_msg = f"Error searching textbook: {str(e)}"
+        print(f"[SEARCH ERROR] {error_msg}")
+        import traceback
+        traceback.print_exc()
+        return error_msg
 
 # 1. Book Expert Agent
 book_expert_agent = Agent(
