@@ -5,7 +5,8 @@ import TranslationFeedback from '@site/src/components/Translation/TranslationFee
 import API_BASE_URL from '@site/src/config/api';
 
 const Chatbot = () => {
-    const { token } = useAuth();
+    const auth = useAuth();
+    const token = auth ? auth.token : null;
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { role: 'assistant', content: 'Hi! I am your AI Tutor. Ask me anything about the book!' }
