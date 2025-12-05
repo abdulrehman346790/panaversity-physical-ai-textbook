@@ -74,6 +74,10 @@ async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
         
         # Run the agent workflow with session
         result = await Runner.run(triage_agent, enhanced_message, session=session, run_config=config)
+        
+        # Debug logging
+        print(f"Agent result: {result}")
+        print(f"Final output: {result.final_output}")
 
         # Post-process: consult user language pref and translate if necessary
         user_lang = 'en'
@@ -85,7 +89,7 @@ async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
             except Exception:
                 user_lang = 'en'
 
-        final_text = result.final_output
+        final_text = result.final_output if result.final_output else "I apologize, but I encountered an issue processing your request."
         is_translated = False
         if user_lang == 'ur' and final_text:
             try:
