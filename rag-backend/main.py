@@ -110,9 +110,8 @@ async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
 @app.post("/ingest")
 async def trigger_ingestion():
     try:
-        # Run ingestion in a separate thread/process in production
-        # For hackathon, running synchronously is acceptable but might timeout
-        ingest_docs()
+        # Run ingestion asynchronously
+        await ingest_docs()
         return {"status": "Ingestion complete"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

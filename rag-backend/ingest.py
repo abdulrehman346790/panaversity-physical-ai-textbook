@@ -28,8 +28,8 @@ openai_client = AsyncOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
 )
 
-def get_embedding(text):
-    response = openai_client.embeddings.create(
+async def get_embedding(text):
+    response = await openai_client.embeddings.create(
         input=text,
         model="text-embedding-004"
     )
@@ -47,7 +47,7 @@ def parse_markdown(file_path):
     chunks = [p.strip() for p in text.split('\n\n') if len(p.strip()) > 50]
     return chunks
 
-def ingest_docs():
+async def ingest_docs():
     print("Starting ingestion...")
     
     # Recreate Collection to ensure correct vector size
@@ -57,7 +57,7 @@ def ingest_docs():
     )
     print(f"Recreated collection: {COLLECTION_NAME}")
 
-    files = glob.glob(os.path.join(DOCS_DIR, "*.md"))
+    files = glob.glob(os.path.join(DOCS_DIR, "**/*.md"), recursive=True)
     total_chunks = 0
     
     for file_path in files:
@@ -68,9 +68,9 @@ def ingest_docs():
         points = []
         
         for i, chunk in enumerate(chunks):
-            embedding = get_embedding(chunk)
+            embedding = await get_embedding(chunk)  # Added await
             points.append(models.PointStruct(
-                id=total_chunks + i,  # Simple ID generation (better to use UUID in prod)
+                id=total_chunks + i,
                 vector=embedding,
                 payload={
                     "source": filename,
@@ -89,4 +89,5 @@ def ingest_docs():
     print(f"Ingestion complete! Total chunks: {total_chunks}")
 
 if __name__ == "__main__":
-    ingest_docs()
+    import asyncio
+    asyncio.run(ingest_docs())
