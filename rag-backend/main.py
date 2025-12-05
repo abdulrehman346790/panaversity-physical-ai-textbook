@@ -68,8 +68,12 @@ async def chat_endpoint(request: ChatRequest, db = Depends(get_db)):
         if personalization_context:
             enhanced_message = f"[USER CONTEXT: {personalization_context}]\n\nUser Question: {request.message}"
         
-        # Run the agent workflow
-        result = await Runner.run(triage_agent, enhanced_message, run_config=config)
+        # Create session for conversation history
+        session_id = request.token if request.token else "anonymous"
+        session = SQLiteSession(f"conversation_{session_id}")
+        
+        # Run the agent workflow with session
+        result = await Runner.run(triage_agent, enhanced_message, session=session, run_config=config)
 
         # Post-process: consult user language pref and translate if necessary
         user_lang = 'en'
