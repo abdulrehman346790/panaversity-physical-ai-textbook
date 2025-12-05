@@ -1,13 +1,16 @@
 import React from 'react';
 import Head from '@docusaurus/Head';
+import { AuthProvider } from '../components/Auth/AuthContext';
+import { TranslationProvider } from '../components/Translation/TranslationContext';
 
 // Default implementation, that you can customize
 export default function Root({ children }) {
-    return (
-        <>
-            <Head>
-                <script>
-                    {`
+  return (
+    <AuthProvider>
+      <TranslationProvider>
+        <Head>
+          <script>
+            {`
             (function() {
               try {
                 var x = '__storage_test__';
@@ -31,9 +34,10 @@ export default function Root({ children }) {
               }
             })();
           `}
-                </script>
-            </Head>
-            {children}
-        </>
-    );
+          </script>
+        </Head>
+        {children}
+      </TranslationProvider>
+    </AuthProvider>
+  );
 }
